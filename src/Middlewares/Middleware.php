@@ -150,14 +150,13 @@ class Middleware extends \Plenty\Plugin\Middleware
 
     public function after(Request $request/*, Response $response*/)//:Response
     {
-        // do nothing, show old cms instaed of 404 page
 
-        /*
         if ($response->status() == ResponseCode::NOT_FOUND)
         {
             if(RouteConfig::isActive(RouteConfig::PAGE_NOT_FOUND) || self::$FORCE_404)
             {
-                /** @var StaticPagesController $controller *-/
+                /** @var StaticPagesController $controller */
+                /*
                 $controller = pluginApp(StaticPagesController::class);
                 
                 $response = $response->make(
@@ -165,11 +164,11 @@ class Middleware extends \Plenty\Plugin\Middleware
                     ResponseCode::NOT_FOUND
                 );
                 $response->forceStatus(ResponseCode::NOT_FOUND);
+                */
             }
         }
 
         return $response;
-        */
     }
 
     private function setLanguage($language, $webstoreConfig)
