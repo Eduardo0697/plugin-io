@@ -83,8 +83,9 @@ class StaticPagesController extends LayoutController
      * Prepare and render the data for the page not found page
      * @return string
      */
-    public function showPageNotFound():string
+    public function showPageNotFound()//:string
     {
+        /*
         return $this->renderTemplate(
             "tpl.page-not-found",
             [
@@ -92,5 +93,6 @@ class StaticPagesController extends LayoutController
             ],
             false
         );
+        */
     }
 }

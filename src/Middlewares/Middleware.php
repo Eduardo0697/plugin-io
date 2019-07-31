@@ -156,15 +156,13 @@ class Middleware extends \Plenty\Plugin\Middleware
             if(RouteConfig::isActive(RouteConfig::PAGE_NOT_FOUND) || self::$FORCE_404)
             {
                 /** @var StaticPagesController $controller */
-                /*
                 $controller = pluginApp(StaticPagesController::class);
                 
                 $response = $response->make(
                     $controller->showPageNotFound(),
-                    ResponseCode::NOT_FOUND
+                    ResponseCode::OK
                 );
                 $response->forceStatus(ResponseCode::NOT_FOUND);
-                */
             }
         }
 
