@@ -160,9 +160,9 @@ class Middleware extends \Plenty\Plugin\Middleware
                 
                 $response = $response->make(
                     $controller->showPageNotFound(),
-                    ResponseCode::OK
+                    ResponseCode::NOT_FOUND
                 );
-                $response->forceStatus(ResponseCode::NOT_FOUND);
+                $response->forceStatus(ResponseCode::OK);
             }
         }
 

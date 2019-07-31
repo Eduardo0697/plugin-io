@@ -307,7 +307,7 @@ class IORouteServiceProvider extends RouteServiceProvider
 
         if ( RouteConfig::isActive(RouteConfig::PAGE_NOT_FOUND) )
         {
-            $router->get('{anything?}', 'IO\Controllers\StaticPagesController@showPageNotFound');
+            //$router->get('{anything?}', 'IO\Controllers\StaticPagesController@showPageNotFound');
         }
 	}
 }
