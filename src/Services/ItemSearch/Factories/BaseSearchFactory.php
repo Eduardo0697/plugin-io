@@ -84,7 +84,10 @@ class BaseSearchFactory
 
     /** @var int */
     private $itemsPerPage = -1;
-
+    
+    /** @var IncludeSource */
+    private $source = null;
+    
     /**
      * Create a new factory instance based on properties of an existing factory.
      *
@@ -101,11 +104,6 @@ class BaseSearchFactory
 
         if ( $searchBuilder !== null )
         {
-            if ( $inheritedProperties === null || in_array(self::INHERIT_COLLAPSE, $inheritedProperties ) )
-            {
-                $newBuilder->collapse = $searchBuilder->collapse;
-            }
-
             if ( $inheritedProperties === null || in_array(self::INHERIT_EXTENSIONS, $inheritedProperties ) )
             {
                 $newBuilder->extensions = $searchBuilder->extensions;
@@ -384,6 +382,20 @@ class BaseSearchFactory
      */
     public function build()
     {
+        $this->source = pluginApp( IncludeSource::class );
+        
+        // ADD RESULT FIELDS
+        
+        $resultFields = $this->resultFields;
+        if ( count( $resultFields ) )
+        {
+            $this->source->activateList( $resultFields );
+        }
+        else
+        {
+            $this->source->activateAll();
+        }
+        
         $search = $this->prepareSearch();
 
         // ADD FILTERS
@@ -416,20 +428,7 @@ class BaseSearchFactory
             $aggregationClasses[] = get_class($aggregation);
             $search->addAggregation( $aggregation );
         }
-
-        // ADD RESULT FIELDS
-        /** @var IncludeSource $source */
-        $source = pluginApp( IncludeSource::class );
-        $resultFields = $this->resultFields;
-        if ( count( $resultFields ) )
-        {
-            $source->activateList( $resultFields );
-        }
-        else
-        {
-            $source->activateAll();
-        }
-
+        
         if ( $this->sorting !== null )
         {
             $search->setSorting( $this->sorting );
@@ -441,9 +440,9 @@ class BaseSearchFactory
         }
 
         $search->setPage( $this->page, $this->itemsPerPage );
-
-        $search->addSource( $source );
-
+        
+        $search->addSource( $this->source );
+        
         $this->getLogger(__CLASS__)->debug(
             "IO::Debug.BaseSearchFactory_buildSearch",
             [
@@ -469,15 +468,10 @@ class BaseSearchFactory
     {
         if($this->collapse instanceof BaseCollapse)
         {
-            /** @var IndependentSource $source */
-            $source = pluginApp(IndependentSource::class);
-            //$source->activate('variation.id', 'item.id');
-            $source->activate();
-    
             /** @var BaseInnerHit $innerHit */
             $innerHit = pluginApp(BaseInnerHit::class, ['cheapest']);
             $innerHit->setSorting(pluginApp(SingleSorting::class, ['sorting.price.avg', 'asc']));
-            $innerHit->setSource($source);
+            $innerHit->setSource($this->source);
             $this->collapse->addInnerHit($innerHit);
     
             /** @var DocumentInnerHitsToRootProcessor $docProcessor */
