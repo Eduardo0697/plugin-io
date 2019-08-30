@@ -84,6 +84,12 @@ class BaseSearchFactory
 
     /** @var int */
     private $itemsPerPage = -1;
+    
+    /** @var IncludeSource */
+    private $source = null;
+    
+    /** @var BaseInnerHit */
+    private $innerHit;
 
     /**
      * Create a new factory instance based on properties of an existing factory.
@@ -101,11 +107,6 @@ class BaseSearchFactory
 
         if ( $searchBuilder !== null )
         {
-            if ( $inheritedProperties === null || in_array(self::INHERIT_COLLAPSE, $inheritedProperties ) )
-            {
-                $newBuilder->collapse = $searchBuilder->collapse;
-            }
-
             if ( $inheritedProperties === null || in_array(self::INHERIT_EXTENSIONS, $inheritedProperties ) )
             {
                 $newBuilder->extensions = $searchBuilder->extensions;
@@ -366,10 +367,13 @@ class BaseSearchFactory
      */
     public function groupBy( $field )
     {
-        /** @var BaseCollapse $collapse */
-        $collapse = pluginApp( BaseCollapse::class, [$field] );
-        $this->collapse = $collapse;
-
+        $this->collapse = pluginApp( BaseCollapse::class, [$field] );
+    
+        $this->innerHit = pluginApp(BaseInnerHit::class, ['cheapest']);
+        $this->innerHit->setSorting(pluginApp(SingleSorting::class, ['sorting.price.avg', 'asc']));
+        //$this->innerHit->setSource($this->source);
+        $this->collapse->addInnerHit($this->innerHit);
+        
         $counterAggregationProcessor = pluginApp( ItemAttributeValueCardinalityAggregationProcessor::class );
         $counterAggregation = pluginApp( ItemAttributeValueCardinalityAggregation::class, [$counterAggregationProcessor, $field] );
         $this->withAggregation( $counterAggregation );
@@ -384,6 +388,24 @@ class BaseSearchFactory
      */
     public function build()
     {
+        // ADD RESULT FIELDS
+        $this->source = pluginApp( IncludeSource::class );
+        
+        $resultFields = $this->resultFields;
+        if ( count( $resultFields ) )
+        {
+            $this->source->activateList( $resultFields );
+        }
+        else
+        {
+            $this->source->activateAll();
+        }
+        
+        if(!is_null($this->innerHit))
+        {
+            $this->innerHit->setSource($this->source);
+        }
+        
         $search = $this->prepareSearch();
 
         // ADD FILTERS
@@ -417,19 +439,6 @@ class BaseSearchFactory
             $search->addAggregation( $aggregation );
         }
 
-        // ADD RESULT FIELDS
-        /** @var IncludeSource $source */
-        $source = pluginApp( IncludeSource::class );
-        $resultFields = $this->resultFields;
-        if ( count( $resultFields ) )
-        {
-            $source->activateList( $resultFields );
-        }
-        else
-        {
-            $source->activateAll();
-        }
-
         if ( $this->sorting !== null )
         {
             $search->setSorting( $this->sorting );
@@ -442,7 +451,7 @@ class BaseSearchFactory
 
         $search->setPage( $this->page, $this->itemsPerPage );
 
-        $search->addSource( $source );
+        $search->addSource( $this->source );
 
         $this->getLogger(__CLASS__)->debug(
             "IO::Debug.BaseSearchFactory_buildSearch",
@@ -457,6 +466,9 @@ class BaseSearchFactory
             ]
         );
 
+        //$this->collapse = null;
+        //$this->innerHit = null;
+        
         return $search;
     }
 
@@ -469,19 +481,8 @@ class BaseSearchFactory
     {
         if($this->collapse instanceof BaseCollapse)
         {
-            /** @var IndependentSource $source */
-            $source = pluginApp(IndependentSource::class);
-            //$source->activate('variation.id', 'item.id');
-            $source->activate();
-    
-            /** @var BaseInnerHit $innerHit */
-            $innerHit = pluginApp(BaseInnerHit::class, ['cheapest']);
-            $innerHit->setSorting(pluginApp(SingleSorting::class, ['sorting.price.avg', 'asc']));
-            $innerHit->setSource($source);
-            $this->collapse->addInnerHit($innerHit);
-    
             /** @var DocumentInnerHitsToRootProcessor $docProcessor */
-            $processor = pluginApp(DocumentInnerHitsToRootProcessor::class, [$innerHit->getName()]);
+            $processor = pluginApp(DocumentInnerHitsToRootProcessor::class, [$this->innerHit->getName()]);
             $search = pluginApp(DocumentSearch::class, [$processor]);
     
             // Group By Item Id
