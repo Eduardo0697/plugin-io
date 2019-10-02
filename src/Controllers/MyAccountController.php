@@ -3,6 +3,7 @@ namespace IO\Controllers;
 
 use IO\Extensions\Constants\ShopUrls;
 use IO\Guards\AuthGuard;
+use IO\Helper\RouteConfig;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Modules\ShopBuilder\Helper\ShopBuilderRequest;
 
@@ -37,4 +38,12 @@ class MyAccountController extends LayoutController
             ],
             false );
 	}
+
+    public function redirect()
+    {
+        /** @var ShopUrls $shopUrls */
+        $shopUrls = pluginApp(ShopUrls::class);
+        $categoryController = pluginApp(CategoryController::class);
+        return $categoryController->redirectToCategory($shopUrls->myAccount);
+    }
 }

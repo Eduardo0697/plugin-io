@@ -4,6 +4,7 @@ namespace IO\Controllers;
 use IO\Api\ResponseCode;
 use IO\Constants\SessionStorageKeys;
 use IO\Extensions\Constants\ShopUrls;
+use IO\Helper\RouteConfig;
 use IO\Services\CustomerService;
 use IO\Services\SessionStorageService;
 use IO\Services\UrlService;
@@ -26,6 +27,7 @@ class CheckoutController extends LayoutController
      * Prepare and render the data for the checkout
      * @param Category $category
      * @return string
+     * @throws \ErrorException
      */
     public function showCheckout($category = null)
     {
@@ -73,5 +75,13 @@ class CheckoutController extends LayoutController
             ],
             false
         );
+    }
+
+    public function redirect()
+    {
+        /** @var ShopUrls $shopUrls */
+        $shopUrls = pluginApp(ShopUrls::class);
+        $categoryController = pluginApp(CategoryController::class);
+        return $categoryController->redirectToCategory($shopUrls->checkout);
     }
 }

@@ -183,4 +183,44 @@ class CategoryController extends LayoutController
             ]
         );
     }
+
+    public function showCheckout()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::CHECKOUT));
+    }
+
+    public function showMyAccount()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::MY_ACCOUNT));
+    }
+
+    public function showCancellationRights()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::CANCELLATION_RIGHTS));
+    }
+
+    public function showCancellationForm()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::CANCELLATION_FORM));
+    }
+
+    public function showLegalDisclosure()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::LEGAL_DISCLOSURE));
+    }
+
+    public function showPrivacyPolicy()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::PRIVACY_POLICY));
+    }
+
+    public function showTermsConditions()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::TERMS_CONDITIONS));
+    }
+
+    public function showContact()
+    {
+        return $this->showCategoryById(RouteConfig::getCategoryId(RouteConfig::CONTACT));
+    }
 }
