@@ -11,6 +11,9 @@ use Plenty\Plugin\Log\Loggable;
 /**
  * Class AuthenticationService
  * @package IO\Services
+ *
+ * @deprecated since 4.5.0 will be removed in 5.0.0 use Plenty\Modules\Webshop\Services\AuthenticationService instead
+ * @see \Plenty\Modules\Webshop\Services\AuthenticationService
  */
 class AuthenticationService
 {
@@ -49,6 +52,9 @@ class AuthenticationService
      * @param string $email
      * @param string $password
      * @return int|null
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use login() from Plenty\Modules\Webshop\Services\AuthenticationService instead
+     * @see \Plenty\Modules\Webshop\Services\AuthenticationService::login()
      */
     public function login(string $email, string $password)
     {
@@ -68,6 +74,9 @@ class AuthenticationService
      * Perform the login with customer ID and password
      * @param int $contactId
      * @param string $password
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use loginWithContactId() from Plenty\Modules\Webshop\Services\AuthenticationService instead
+     * @see \Plenty\Modules\Webshop\Services\AuthenticationService::loginWithContactId()
      */
     public function loginWithContactId(int $contactId, string $password): void
     {
@@ -77,6 +86,9 @@ class AuthenticationService
 
     /**
      * Log out the customer
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use logout() from Plenty\Modules\Webshop\Services\AuthenticationService instead
+     * @see \Plenty\Modules\Webshop\Services\AuthenticationService::logout()
      */
     public function logout(): void
     {
@@ -93,6 +105,9 @@ class AuthenticationService
     /**
      * @param string $password
      * @return bool
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use verifyPassword() from Plenty\Modules\Webshop\Services\AuthenticationService instead
+     * @see \Plenty\Modules\Webshop\Services\AuthenticationService::verifyPassword()
      */
     public function checkPassword($password): bool
     {
@@ -121,6 +136,9 @@ class AuthenticationService
 
     /**
      * @return bool
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use isContactLoggedIn() from Plenty\Modules\Webshop\Services\AuthenticationService instead
+     * @see \Plenty\Modules\Webshop\Services\AuthenticationService::isContactLoggedIn()
      */
     public function isLoggedIn(): bool
     {

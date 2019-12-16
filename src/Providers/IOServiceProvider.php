@@ -213,6 +213,13 @@ class IOServiceProvider extends ServiceProvider
         $dispatcher->listen(FrontendUpdateDeliveryAddress::class, IOFrontendUpdateDeliveryAddress::class);
 
         $cronContainer->add(CronContainer::DAILY, CleanupUserDataHashes::class );
+
+        // make specific plugin config value accessible in core packages
+        /** @var \Plenty\Modules\Webshop\Frontend\Services\TemplateConfigService $templateConfigService */
+        $templateConfigService = pluginApp(\Plenty\Modules\Webshop\Frontend\Services\TemplateConfigService::class);
+        /** @var TemplateConfigService $pluginTemplateConfigService */
+        $pluginTemplateConfigService = pluginApp(TemplateConfigService::class);
+        $templateConfigService->registerConfigValue('language.active_languages', $pluginTemplateConfigService->get('language.active_languages'));
     }
 
     private function registerSingletons( $classes )

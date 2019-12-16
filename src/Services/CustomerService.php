@@ -35,6 +35,7 @@ use Plenty\Modules\Helper\AutomaticEmail\Models\AutomaticEmailContact;
 use Plenty\Modules\System\Contracts\WebstoreConfigurationRepositoryContract;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Plugin\Events\Dispatcher;
+use Plenty\Modules\Webshop\Frontend\Services\AuthenticationService as AuthService;
 
 /**
  * Class CustomerService
@@ -232,8 +233,8 @@ class CustomerService
         /** @var BasketService $basketService */
         $basketService = pluginApp(BasketService::class);
 
-        /** @var AuthenticationService $authenticationService */
-        $authenticationService = pluginApp(AuthenticationService::class);
+        /** @var AuthService $authenticationService */
+        $authenticationService = pluginApp(AuthService::class);
 
         $newBillingAddress = null;
         $newDeliveryAddress = null;
@@ -256,7 +257,7 @@ class CustomerService
 
         if (!is_null($contact) && $contact->id > 0) {
             //Login
-            $authenticationService->loginWithContactId($contact->id, (string)$contactData['password']);
+            $result = $authenticationService->loginWithContactId($contact->id, (string)$contactData['password']);
 
             if ($guestBillingAddress !== null) {
                 $newBillingAddress = $this->createAddress(

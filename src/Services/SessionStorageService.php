@@ -6,13 +6,15 @@ use IO\Helper\Utils;
 use Plenty\Modules\Frontend\Events\FrontendLanguageChanged;
 use Plenty\Modules\Frontend\Session\Storage\Contracts\FrontendSessionStorageFactoryContract;
 use Plenty\Modules\Frontend\Session\Storage\Models\Customer;
-use Plenty\Plugin\Application;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\Http\Request;
 
 /**
  * Class SessionStorageService
  * @package IO\Services
+ *
+ * @deprecated since 4.5.0 will be removed in 5.0.0 use Plenty\Modules\Webshop\Services\SessionStorageService instead
+ * @see \Plenty\Modules\Webshop\Services\SessionStorageService
  */
 class SessionStorageService
 {
@@ -40,6 +42,9 @@ class SessionStorageService
      * Set the value in the session
      * @param string $name
      * @param $value
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use setSessionValue() from Plenty\Modules\Webshop\Services\SessionStorageService instead
+     * @see \Plenty\Modules\Webshop\Services\SessionStorageService::setSessionValue()
      */
 	public function setSessionValue(string $name, $value)
 	{
@@ -50,6 +55,9 @@ class SessionStorageService
      * Get a value from the session
      * @param string $name
      * @return mixed
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use getSessionValue() from Plenty\Modules\Webshop\Services\SessionStorageService instead
+     * @see \Plenty\Modules\Webshop\Services\SessionStorageService::getSessionValue()
      */
 	public function getSessionValue(string $name)
 	{
@@ -59,6 +67,9 @@ class SessionStorageService
     /**
      * Get the language from session
      * @return string
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use getLang() from Plenty\Modules\Webshop\Services\SessionStorageService instead
+     * @see \Plenty\Modules\Webshop\Services\SessionStorageService::getLang()
      */
 	public function getLang()
 	{
@@ -88,6 +99,9 @@ class SessionStorageService
 
     /**
      * @return Customer
+     *
+     * @deprecated since 4.5.0 will be removed in 5.0.0 use getCustomer() from Plenty\Modules\Webshop\Services\SessionStorageService instead
+     * @see \Plenty\Modules\Webshop\Services\SessionStorageService::getCustomer()
      */
 	public function getCustomer()
     {

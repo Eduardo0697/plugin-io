@@ -5,6 +5,9 @@ namespace IO\Constants;
 /**
  * Class SessionStorageKeys
  * @package IO\Constants
+ *
+ * @deprecated since 4.5.0 will be removed in 5.0.0 use Plenty\Modules\Webshop\Constants\SessionStorageKeys instead
+ * @see \Plenty\Modules\Webshop\Constants\SessionStorageKeys
  */
 class SessionStorageKeys
 {

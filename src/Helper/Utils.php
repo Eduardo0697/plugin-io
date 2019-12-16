@@ -2,12 +2,12 @@
 
 namespace IO\Helper;
 
-use IO\Services\SessionStorageService;
 use IO\Services\TemplateConfigService;
 use IO\Services\UrlBuilder\UrlQuery;
-use IO\Services\WebstoreConfigurationService;
-use Plenty\Modules\Frontend\Services\AccountService;
 use Plenty\Modules\ShopBuilder\Helper\ShopBuilderRequest;
+use Plenty\Modules\Webshop\Frontend\Services\AuthenticationService;
+use Plenty\Modules\Webshop\Frontend\Services\SessionStorageService;
+use Plenty\Modules\Webshop\Frontend\Services\WebstoreConfigurationService;
 use Plenty\Plugin\Application;
 use Plenty\Plugin\Translation\Translator;
 
@@ -64,9 +64,9 @@ class Utils
 
     public static function isContactLoggedIn()
     {
-        /** @var AccountService $accountService */
-        $accountService = pluginApp(AccountService::class);
-        return $accountService->getIsAccountLoggedIn();
+        /** @var AuthenticationService $accountService */
+        $authenticationService = pluginApp(AuthenticationService::class);
+        return $authenticationService->isContactLoggedIn();
     }
 
     public static function getTemplateConfig($key, $default = null)
