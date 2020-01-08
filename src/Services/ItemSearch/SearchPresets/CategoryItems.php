@@ -28,40 +28,37 @@ class CategoryItems implements SearchPreset
      */
     public static function getSearchFactory($options)
     {
-        $categoryId     = $options['categoryId'];
-        $facets         = $options['facets'];
-        $sorting        = SortingHelper::getCategorySorting( $options['sorting'] );
+        $categoryId = $options['categoryId'];
+        $facets = $options['facets'];
+        $sorting = SortingHelper::getCategorySorting($options['sorting']);
+        $innerSorting = SortingHelper::getSorting(null, 'sorting.priorityDynamic');
 
         $page = 1;
-        if ( array_key_exists('page', $options ) )
-        {
-            $page = (int) $options['page'];
+        if (array_key_exists('page', $options)) {
+            $page = (int)$options['page'];
         }
 
         $itemsPerPage = 20;
-        if ( array_key_exists( 'itemsPerPage', $options ) )
-        {
-            $itemsPerPage = (int) $options['itemsPerPage'];
+        if (array_key_exists('itemsPerPage', $options)) {
+            $itemsPerPage = (int)$options['itemsPerPage'];
         }
 
         $priceMin = 0;
-        if ( array_key_exists('priceMin', $options) )
-        {
-            $priceMin = (float) $options['priceMin'];
+        if (array_key_exists('priceMin', $options)) {
+            $priceMin = (float)$options['priceMin'];
         }
 
         $priceMax = 0;
-        if ( array_key_exists('priceMax', $options) )
-        {
-            $priceMax = (float) $options['priceMax'];
+        if (array_key_exists('priceMax', $options)) {
+            $priceMax = (float)$options['priceMax'];
         }
 
         /** @var VariationSearchFactory $searchFactory */
         $searchFactory = pluginApp(VariationSearchFactory::class);
 
         $searchFactory->withResultFields(
-                ResultFieldTemplate::load( ResultFieldTemplate::TEMPLATE_LIST_ITEM )
-            );
+            ResultFieldTemplate::load(ResultFieldTemplate::TEMPLATE_LIST_ITEM)
+        );
 
         $searchFactory
             ->withLanguage()
@@ -69,16 +66,17 @@ class CategoryItems implements SearchPreset
             ->withUrls()
             ->withPrices()
             ->withDefaultImage()
-            ->isInCategory( $categoryId )
+            ->isInCategory($categoryId)
             ->isVisibleForClient()
             ->isActive()
             ->isHiddenInCategoryList(false)
             ->hasNameInLanguage()
             ->hasPriceForCustomer()
             ->hasPriceInRange($priceMin, $priceMax)
-            ->hasFacets( $facets )
-            ->sortByMultiple( $sorting )
-            ->setPage( $page, $itemsPerPage )
+            ->hasFacets($facets)
+            ->sortByMultiple($sorting)
+            ->sortInnerByMultiple($innerSorting)
+            ->setPage($page, $itemsPerPage)
             ->groupByTemplateConfig()
             ->withLinkToContent()
             ->withGroupedAttributeValues()
