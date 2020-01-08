@@ -31,7 +31,7 @@ class SortingHelper
             foreach ([1, 2, 3] as $priority) {
                 $defaultSortingValue = $templateConfigService->get($configKeyPrefix . $priority);
                 if ($defaultSortingValue !== 'notSelected' && !is_null($defaultSortingValue)) {
-                    $defaultSorting = self::getSorting($defaultSortingValue, $isCategory);
+                    $defaultSorting = self::getSorting($defaultSortingValue, $configKeyPrefix);
                     $sortings[] = $defaultSorting[0];
                 }
             }
