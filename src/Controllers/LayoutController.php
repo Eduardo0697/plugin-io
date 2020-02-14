@@ -11,11 +11,9 @@ use IO\Middlewares\CheckNotFound;
 use IO\Services\CategoryService;
 use IO\Services\TemplateService;
 use IO\Services\UrlService;
-use Plenty\Modules\Category\Contracts\CategoryRepositoryContract;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Modules\ContentCache\Contracts\ContentCacheRepositoryContract;
 use Plenty\Plugin\Application;
-use Plenty\Plugin\Controller;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
@@ -28,7 +26,7 @@ use Plenty\Plugin\Templates\Twig;
  * Class LayoutController
  * @package IO\Controllers
  */
-abstract class LayoutController extends Controller
+abstract class LayoutController extends CategoryByUrlController
 {
     use Loggable;
 
@@ -46,11 +44,6 @@ abstract class LayoutController extends Controller
 	 * @var Dispatcher
 	 */
 	protected $event;
-
-	/**
-	 * @var CategoryRepositoryContract
-	 */
-	protected $categoryRepo;
 
 	/**
 	 * @var CategoryMap
@@ -78,17 +71,15 @@ abstract class LayoutController extends Controller
 	 * @param Application $app
 	 * @param Twig $twig
 	 * @param Dispatcher $event
-	 * @param CategoryRepositoryContract $categoryRepo
 	 * @param CategoryMap $categoryMap
 	 * @param CategoryService $categoryService
 	 */
-	public function __construct(Application $app, Twig $twig, Dispatcher $event, CategoryRepositoryContract $categoryRepo, CategoryMap $categoryMap, CategoryService $categoryService, UrlService $urlService)
+	public function __construct(Application $app, Twig $twig, Dispatcher $event, CategoryMap $categoryMap, CategoryService $categoryService, UrlService $urlService)
 	{
 	    parent::__construct();
 		$this->app             = $app;
 		$this->twig            = $twig;
 		$this->event           = $event;
-		$this->categoryRepo    = $categoryRepo;
 		$this->categoryMap     = $categoryMap;
 		$this->categoryService = $categoryService;
 		$this->urlService      = $urlService;
